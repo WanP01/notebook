@@ -8,6 +8,7 @@ class User(models.Model):
     password=models.CharField('password',max_length=32)
     create_time=models.DateTimeField('Create_time',auto_now_add=True)
     updated_time=models.DateTimeField('updated_time',auto_now=True)
+    is_active = models.BooleanField('是否激活',default=True)
 
     def __str__(self):
         return 'username %s'%(self.username)
