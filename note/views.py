@@ -1,5 +1,9 @@
+import paginator as paginator
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
+
 from .models  import *
 from user.models import *
 
@@ -27,7 +31,8 @@ def Check_login(f):
         return f(request,*args,**kwargs)
     return wrap
 
-
+#列表页存入缓存
+@cache_page(10)
 @Check_login
 def list_view(request):
 
@@ -36,6 +41,13 @@ def list_view(request):
     username = request.session.get('username')
     #根据登陆者的id通过外键查寻对应的note(返回值对象类list)
     someone_note = Note.objects.filter(user_id=uid,is_active = True)
+
+    #从浏览器的request里捞取page——num
+    page_num = request.GET.get('page',1)
+
+    #进行分页处理paginator
+    paginator = Paginator(someone_note,5)
+    page = paginator.page(int(page_num))
 
     return render(request,'note/list_note.html',locals())
 

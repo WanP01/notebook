@@ -20,7 +20,9 @@
         <th>修改</th>
         <th>删除</th>
     </tr>
-    {% for x in someone_note %}
+
+
+        {% for x in page.object_list %}
         <tr>
             <td>{{x.id}}</td>
             <td>{{x.title}}</td>
@@ -35,6 +37,31 @@
         </tr>
     {% endfor %}
 </table>
+
+
+{% if page.has_previous %}
+    <a href="/note/all?page={{page.previous_page_number}}">上一页</a>
+{% else %}
+    上一页
+{% endif %}
+
+{% for p in paginator.page_range %}
+
+    {% if page_num == p %}
+        {{p}}
+
+    {% else %}
+        <a href="/note/all?page={{p}}">{{p}}</a>
+
+    {% endif %}
+
+{% endfor %}
+
+{% if page.has_next %}
+    <a href="/note/all?page={{page.next_page_number}}">下一页</a>
+{% else %}
+    下一页
+{% endif %}
 
 
 
